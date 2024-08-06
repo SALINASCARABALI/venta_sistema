@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <h1>Registrar Proveedor</h1>
+    <form method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre">
+        <br>
+        <label for="contacto">Contacto:</label>
+        <input type="text" id="contacto" name="contacto">
+        <br>
+        <input type="submit" value="Registrar Proveedor">
+    </form>
+    <h2>Proveedores</h2>
+    <ul>
+        {% for proveedor in proveedores %}
+            <li>{{ proveedor.nombre }} - {{ proveedor.contacto }}</li>
+        {% endfor %}
+    </ul>
+</nav>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

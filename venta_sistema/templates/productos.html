@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Productos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilos.css') }}">
+</head>
+<body>
+    <h1>Registrar Producto</h1>
+    <form method="POST">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre">
+        <br>
+        <label for="precio">Precio:</label>
+        <input type="number" step="0.01" id="precio" name="precio">
+        <br>
+        <input type="submit" value="Registrar Producto">
+    </form>
+    <h2>Productos</h2>
+    <ul>
+        {% for producto in productos %}
+            <li>{{ producto.nombre }} - {{ producto.precio }}</li>
+        {% endfor %}
+    </ul>
+</nav>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
