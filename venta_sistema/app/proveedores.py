@@ -1,31 +1,24 @@
-import json
+from app.conexion import db
 
-class Proveedor:
-    def __init__(self):
-        self.proveedores_file = 'data/proveedores.json'
-        self.load_proveedores()
+class Proveedor(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    contacto = db.Column(db.String(100), nullable=False)
 
-    def load_proveedores(self):
-        try:
-            with open(self.proveedores_file, 'r') as file:
-                self.proveedores = json.load(file)
-        except FileNotFoundError:
-            self.proveedores = []
+    def __init__(self, nombre, contacto):
+        self.nombre = nombre
+        self.contacto = contacto
 
-    def save_proveedores(self):
-        with open(self.proveedores_file, 'w') as file:
-            json.dump(self.proveedores, file)
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-    def registrar_proveedor(self, nombre, contacto):
-        proveedor = {'nombre': nombre, 'contacto': contacto}
-        self.proveedores.append(proveedor)
-        self.save_proveedores()
-        return "Proveedor registrado."
+    @staticmethod
+    def registrar_proveedor(nombre, contacto):
+        proveedor = Proveedor(nombre, contacto)
+        proveedor.save()
+        return "Proveedor registrado exitosamente."
 
-    def eliminar_proveedor(self, nombre):
-        self.proveedores = [p for p in self.proveedores if p['nombre'] != nombre]
-        self.save_proveedores()
-        return "Proveedor eliminado."
-
-    def mostrar_proveedores(self):
-        return self.proveedores
+    @staticmethod
+    def mostrar_proveedores():
+        return Proveedor.query.all()

@@ -1,35 +1,31 @@
-import json
 from datetime import datetime
+from app.conexion import db
 
-class Venta:
-    def __init__(self):
-        self.ventas_file = 'data/ventas.json'
-        self.load_ventas()
+class Venta(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    producto = db.Column(db.String(100), nullable=False)
+    cantidad = db.Column(db.Integer, nullable=False)
+    precio = db.Column(db.Float, nullable=False)
+    total = db.Column(db.Float, nullable=False)
+    fecha_hora = db.Column(db.String(20), nullable=False)
 
-    def load_ventas(self):
-        try:
-            with open(self.ventas_file, 'r') as file:
-                self.ventas = json.load(file)
-        except FileNotFoundError:
-            self.ventas = []
+    def __init__(self, producto, cantidad, precio):
+        self.producto = producto
+        self.cantidad = cantidad
+        self.precio = precio
+        self.total = cantidad * precio
+        self.fecha_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    def save_ventas(self):
-        with open(self.ventas_file, 'w') as file:
-            json.dump(self.ventas, file)
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-    def crear_venta(self, producto, cantidad, precio):
-        fecha_hora = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        total = cantidad * precio
-        venta = {
-            'producto': producto,
-            'cantidad': cantidad,
-            'precio': precio,
-            'total': total,
-            'fecha_hora': fecha_hora
-        }
-        self.ventas.append(venta)
-        self.save_ventas()
-        return total
+    @staticmethod
+    def crear_venta(producto, cantidad, precio):
+        venta = Venta(producto, cantidad, precio)
+        venta.save()
+        return venta.total
 
-    def mostrar_ventas(self):
-        return self.ventas
+    @staticmethod
+    def mostrar_ventas():
+        return Venta.query.all()

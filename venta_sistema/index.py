@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from app.login import UserAuth
-from app.ventas import VentaManager
+from app.ventas import Venta
 from app.productos import ProductoManager
 from app.proveedores import ProveedorManager
 from app.conexion import db, init_db
@@ -13,7 +13,7 @@ init_db(app)
 
 # Instanciar las clases
 auth = UserAuth()
-ventas = VentaManager()
+ventas = Venta()
 productos = ProductoManager()
 proveedores = ProveedorManager()
 
@@ -75,7 +75,3 @@ def proveedores_page():
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-

@@ -1,31 +1,24 @@
-import json
+from app.conexion import db
 
-class Producto:
-    def __init__(self):
-        self.productos_file = 'data/productos.json'
-        self.load_productos()
+class Producto(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    nombre = db.Column(db.String(100), nullable=False)
+    precio = db.Column(db.Float, nullable=False)
 
-    def load_productos(self):
-        try:
-            with open(self.productos_file, 'r') as file:
-                self.productos = json.load(file)
-        except FileNotFoundError:
-            self.productos = []
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
 
-    def save_productos(self):
-        with open(self.productos_file, 'w') as file:
-            json.dump(self.productos, file)
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-    def registrar_producto(self, nombre, precio):
-        producto = {'nombre': nombre, 'precio': precio}
-        self.productos.append(producto)
-        self.save_productos()
-        return "Producto registrado."
+    @staticmethod
+    def registrar_producto(nombre, precio):
+        producto = Producto(nombre, precio)
+        producto.save()
+        return "Producto registrado exitosamente."
 
-    def eliminar_producto(self, nombre):
-        self.productos = [p for p in self.productos if p['nombre'] != nombre]
-        self.save_productos()
-        return "Producto eliminado."
-
-    def mostrar_productos(self):
-        return self.productos
+    @staticmethod
+    def mostrar_productos():
+        return Producto.query.all()
