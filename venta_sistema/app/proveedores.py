@@ -4,18 +4,20 @@ class Proveedor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
     contacto = db.Column(db.String(100), nullable=False)
+    correo = db.Column(db.String(100), nullable=False)
 
     def __init__(self, nombre, contacto):
         self.nombre = nombre
         self.contacto = contacto
+        self.correo = correo
 
     def save(self):
         db.session.add(self)
         db.session.commit()
 
     @staticmethod
-    def registrar_proveedor(nombre, contacto):
-        proveedor = Proveedor(nombre, contacto)
+    def registrar_proveedor(nombre, contacto,correo):
+        proveedor = Proveedor(nombre, contacto,correo)
         proveedor.save()
         return "Proveedor registrado exitosamente."
 
